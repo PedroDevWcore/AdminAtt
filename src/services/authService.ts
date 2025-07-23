@@ -25,7 +25,12 @@ class AuthService {
       console.log('Status da resposta:', response.status);
       
       if (!response.ok) {
-        const error = await response.json();
+        let error;
+        try {
+          error = await response.json();
+        } catch (e) {
+          error = { message: 'Erro de comunicação com o servidor' };
+        }
         console.error('Erro da API:', error);
         throw new Error(error.message || 'Erro ao fazer login');
       }

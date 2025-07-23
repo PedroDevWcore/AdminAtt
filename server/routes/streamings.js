@@ -121,7 +121,7 @@ router.post('/', authenticateToken, requireLevel(['super_admin', 'admin']), asyn
         player_titulo, player_descricao, app_nome, app_email
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?)`,
       [
-        codigo_cliente, plano_id || null, codigo_servidor, login, senhaHash, senhaTransmissaoHash,
+        codigo_cliente || null, plano_id || null, codigo_servidor, login, senhaHash, senhaTransmissaoHash,
         identificacao, email, espectadores, bitrate, espaco, 0,
         ftpDir, aplicacao || 'live', idioma_painel || 'pt-br', descricao || '',
         identificacao, descricao || '', identificacao, email
@@ -164,7 +164,7 @@ router.put('/:id', authenticateToken, requireLevel(['super_admin', 'admin']), as
     `;
 
     let params = [
-      codigo_cliente, plano_id || null, codigo_servidor, login,
+      codigo_cliente && codigo_cliente !== 0 ? codigo_cliente : null, plano_id || null, codigo_servidor, login,
       identificacao, email, espectadores, bitrate, espaco,
       aplicacao || 'live', idioma_painel || 'pt-br', descricao || ''
     ];

@@ -83,6 +83,23 @@ app.get('/Admin/*', (req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  
+  // Se for erro de CORS, retornar resposta específica
+  if (err.message && err.message.includes('CORS')) {
+    return res.status(403).json({ 
+      message: 'Erro de CORS - Origem não permitida',
+      error: err.message 
+    });
+  }
+  
+  // Se for erro de JSON parsing
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({ 
+      message: 'Dados JSON inválidos',
+      error: 'Formato de dados incorreto' 
+    });
+  }
+  
   res.status(500).json({ message: 'Erro interno do servidor' });
 });
 

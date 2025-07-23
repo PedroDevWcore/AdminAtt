@@ -73,9 +73,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setProfile(profileData);
         } catch (error) {
           console.error('Erro ao carregar perfil:', error);
+          // Não falhar o login se não conseguir carregar o perfil
+          setProfile(null);
         }
       }
     } catch (error) {
+      console.error('Erro no login:', error);
       throw error;
     }
   };

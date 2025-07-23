@@ -25,7 +25,7 @@ export const StreamingForm: React.FC = () => {
   const [servers, setServers] = useState<WowzaServer[]>([]);
 
   const [formData, setFormData] = useState<StreamingFormData>({
-    codigo_cliente: 0,
+    codigo_cliente: undefined,
     plano_id: undefined,
     codigo_servidor: 0,
     login: '',
@@ -73,7 +73,7 @@ export const StreamingForm: React.FC = () => {
       setLoading(true);
       const streaming = await streamingService.getStreaming(Number(id));
       setFormData({
-        codigo_cliente: streaming.codigo_cliente,
+        codigo_cliente: streaming.codigo_cliente || undefined,
         plano_id: streaming.plano_id,
         codigo_servidor: streaming.codigo_servidor,
         login: streaming.login,
@@ -104,12 +104,21 @@ export const StreamingForm: React.FC = () => {
     setLoading(true);
 
     try {
+      // Validar dados obrigatórios
+      if (!formData.login || !formData.email || !formData.identificacao || formData.codigo_servidor === 0) {
+        throw new Error('Preencha todos os campos obrigatórios');
+      }
+
+      if (!id && !formData.senha) {
+        throw new Error('Senha é obrigatória para nova streaming');
+      }
+
       if (id) {
         await streamingService.updateStreaming(Number(id), formData);
         addNotification({
           type: 'success',
           title: 'Sucesso',
-          message: 'Streaming criada com sucesso.'
+          message: 'Streaming atualizada com sucesso.'
         });
       } else {
         await streamingService.createStreaming(formData);
@@ -121,6 +130,7 @@ export const StreamingForm: React.FC = () => {
       }
       navigate('/streamings');
     } catch (error: any) {
+      console.error('Erro ao salvar streaming:', error);
       addNotification({
         type: 'error',
         title: 'Erro',
@@ -143,12 +153,12 @@ export const StreamingForm: React.FC = () => {
     } else if (type === 'number') {
       setFormData(prev => ({
         ...prev,
-        [name]: Number(value)
+        [name]: value === '' ? undefined : Number(value)
       }));
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: value === '' ? undefined : value
       }));
     }
   };
@@ -207,15 +217,15 @@ export const StreamingForm: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Select
-              label="Revenda Responsável *"
+              label="Revenda Responsável"
               name="codigo_cliente"
-              value={formData.codigo_cliente.toString()}
+              value={formData.codigo_cliente?.toString() || '0'}
               onChange={handleChange}
               options={[
-                { value: '0', label: 'Selecione uma revenda' },
+                { value: '0', label: 'Sem revenda específica' },
                 ...revendas.map(r => ({ value: r.codigo.toString(), label: `${r.nome} (${r.email})` }))
               ]}
-              required
+              helperText="Opcional - deixe em branco se não houver revenda específica"
             />
             <Select
               label="Plano de Streaming"
