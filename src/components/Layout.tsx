@@ -18,7 +18,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { admin, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -118,4 +118,4 @@ export default function Layout({ children }: LayoutProps) {
       </div>
     </div>
   );
-}
+};
