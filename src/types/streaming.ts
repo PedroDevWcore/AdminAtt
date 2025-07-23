@@ -28,7 +28,7 @@ export interface Streaming {
 export interface StreamingFormData {
   codigo_cliente?: number;
   plano_id?: number;
-  codigo_servidor: number;
+  codigo_servidor?: number;
   login: string;
   senha: string;
   identificacao: string;

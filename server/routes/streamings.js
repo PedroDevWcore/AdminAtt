@@ -153,20 +153,23 @@ router.put('/:id', authenticateToken, requireLevel(['super_admin', 'admin']), as
 
     const {
       codigo_cliente, plano_id, codigo_servidor, login, senha, identificacao, email,
-      espectadores, bitrate, espaco, aplicacao, idioma_painel, descricao
+      espectadores, bitrate, espaco, descricao, aplicacao, idioma_painel
     } = req.body;
+
+    // Se não tem revenda, usar 0 como padrão
+    const clienteId = codigo_cliente && codigo_cliente !== 0 ? codigo_cliente : 0;
 
     let updateQuery = `
       UPDATE streamings SET 
         codigo_cliente = ?, plano_id = ?, codigo_servidor = ?, login = ?, 
         identificacao = ?, email = ?, espectadores = ?, bitrate = ?, espaco = ?,
-        aplicacao = ?, idioma_painel = ?, descricao = ?
+        descricao = ?, aplicacao = ?, idioma_painel = ?
     `;
 
     let params = [
-      codigo_cliente && codigo_cliente !== 0 ? codigo_cliente : null, plano_id || null, codigo_servidor, login,
+      clienteId, plano_id || null, codigo_servidor, login,
       identificacao, email, espectadores, bitrate, espaco,
-      aplicacao || 'live', idioma_painel || 'pt-br', descricao || ''
+      descricao || '', aplicacao || 'live', idioma_painel || 'pt-br'
     ];
 
     if (senha && senha.trim() !== '') {

@@ -36,11 +36,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/revendas', icon: Users, label: 'Revendas' },
     { path: '/streamings', icon: Play, label: 'Streamings' },
-    { path: '/servers', icon: Server, label: 'Servidores' },
-    { path: '/streaming-plans', icon: CreditCard, label: 'Planos Streaming' },
-    { path: '/revenda-plans', icon: CreditCard, label: 'Planos Revenda' },
+    { path: '/servidores', icon: Server, label: 'Servidores' },
+    { path: '/planos-streaming', icon: CreditCard, label: 'Planos Streaming' },
+    { path: '/planos-revenda', icon: CreditCard, label: 'Planos Revenda' },
     { path: '/administradores', icon: Shield, label: 'Administradores' },
-    { path: '/profiles', icon: Users, label: 'Perfis de Acesso' },
+    { path: '/perfis', icon: Users, label: 'Perfis de Acesso' },
     { path: '/logs', icon: FileText, label: 'Logs' },
     { path: '/configuracoes', icon: Settings, label: 'Configurações' },
   ];
@@ -96,7 +96,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="flex items-center space-x-3">
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-900">{admin?.nome}</p>
-                  <p className="text-xs text-gray-500">{admin?.nivel}</p>
+                  <p className="text-xs text-gray-500">{admin?.nivel_acesso}</p>
                 </div>
                 
                 <button

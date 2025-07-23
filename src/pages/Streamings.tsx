@@ -400,7 +400,7 @@ export const Streamings: React.FC = () => {
                   <TableCell>
                     <div className="text-sm">
                       <div className="font-medium text-gray-900">{streaming.revenda_nome}</div>
-                      {!streaming.revenda_nome && (
+                      {(!streaming.revenda_nome || streaming.codigo_cliente === 0) && (
                         <div className="text-gray-500 italic">Sem revenda específica</div>
                       )}
                       {streaming.plano_nome && (

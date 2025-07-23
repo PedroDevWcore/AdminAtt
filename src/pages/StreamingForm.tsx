@@ -27,7 +27,7 @@ export const StreamingForm: React.FC = () => {
   const [formData, setFormData] = useState<StreamingFormData>({
     codigo_cliente: undefined,
     plano_id: undefined,
-    codigo_servidor: 0,
+    codigo_servidor: undefined,
     login: '',
     senha: '',
     identificacao: '',
@@ -105,7 +105,7 @@ export const StreamingForm: React.FC = () => {
 
     try {
       // Validar dados obrigatórios
-      if (!formData.login || !formData.email || !formData.identificacao || formData.codigo_servidor === 0) {
+      if (!formData.login || !formData.email || !formData.identificacao || !formData.codigo_servidor) {
         throw new Error('Preencha todos os campos obrigatórios');
       }
 
@@ -153,12 +153,12 @@ export const StreamingForm: React.FC = () => {
     } else if (type === 'number') {
       setFormData(prev => ({
         ...prev,
-        [name]: value === '' ? undefined : Number(value)
+        [name]: value === '' || value === '0' ? undefined : Number(value)
       }));
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value === '' ? undefined : value
+        [name]: value === '' || value === '0' ? undefined : value
       }));
     }
   };
@@ -219,10 +219,10 @@ export const StreamingForm: React.FC = () => {
             <Select
               label="Revenda Responsável"
               name="codigo_cliente"
-              value={formData.codigo_cliente?.toString() || '0'}
+              value={formData.codigo_cliente?.toString() || ''}
               onChange={handleChange}
               options={[
-                { value: '0', label: 'Sem revenda específica' },
+                { value: '', label: 'Sem revenda específica' },
                 ...revendas.map(r => ({ value: r.codigo.toString(), label: `${r.nome} (${r.email})` }))
               ]}
               helperText="Opcional - deixe em branco se não houver revenda específica"
@@ -280,10 +280,10 @@ export const StreamingForm: React.FC = () => {
             <Select
               label="Servidor *"
               name="codigo_servidor"
-              value={formData.codigo_servidor.toString()}
+              value={formData.codigo_servidor?.toString() || ''}
               onChange={handleChange}
               options={[
-                { value: '0', label: 'Selecione um servidor' },
+                { value: '', label: 'Selecione um servidor' },
                 ...servers.map(s => ({ value: s.codigo.toString(), label: `${s.nome} (${s.ip})` }))
               ]}
               required
